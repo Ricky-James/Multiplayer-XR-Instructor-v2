@@ -3,40 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-public class Movement : NetworkBehaviour
+public class Movement : MonoBehaviour
 {
+
+    private Vector3 position { get; set; }
+
     void Update()
     {
-        if (IsOwner && IsClient)
+        
+        if (Input.GetKey(KeyCode.W))
         {
-            if (Input.GetKey(KeyCode.W))
-            {
-                MovementServerRpc(Vector3.forward);
-            }
-            if (Input.GetKey(KeyCode.A))
-            {
-                MovementServerRpc(Vector3.left);
-            }
-            if (Input.GetKey(KeyCode.S))
-            {
-                MovementServerRpc(Vector3.back);
-            }
-            if (Input.GetKey(KeyCode.D))
-            {
-                MovementServerRpc(Vector3.right);
-            }
-
-
+            UpdatePosition(Vector3.forward);
         }
+        if (Input.GetKey(KeyCode.A))
+        {
+            UpdatePosition(Vector3.left);
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            UpdatePosition(Vector3.back);
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            UpdatePosition(Vector3.right);
+        }
+
+        transform.position = position;
+
     }
 
-    [ServerRpc]
-    void MovementServerRpc(Vector3 direction)
+    void UpdatePosition(Vector3 direction)
     {
-        Debug.Log("Executing movement");
-
-        transform.position += direction * (Time.deltaTime * 5);
-
-
+        position += direction * (Time.deltaTime * 5);
     }
+
+
 }

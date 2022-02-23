@@ -234,7 +234,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4846805826401963653
 Transform:
   m_ObjectHideFlags: 0
@@ -410,7 +410,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8233482385790603286
 Transform:
   m_ObjectHideFlags: 0
@@ -518,7 +518,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2922070347750410704
 RectTransform:
   m_ObjectHideFlags: 0
@@ -827,6 +827,8 @@ GameObject:
   - component: {fileID: 3085048315828527339}
   - component: {fileID: 3085048315828527351}
   - component: {fileID: 8319056449691120674}
+  - component: {fileID: 6306085041344440157}
+  - component: {fileID: 3556808815294754078}
   m_Layer: 0
   m_Name: User
   m_TagString: Untagged
@@ -882,6 +884,49 @@ MonoBehaviour:
   Instructor: {fileID: 1217214653494805702}
   Trainee: {fileID: 930628048334600360}
   UserTypeCanvas: {fileID: 1507237069924515126}
+--- !u!114 &6306085041344440157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3085048315828527350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54c9647dc784a46bca664910f182491e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
+  CanCommitToTransform: 0
+--- !u!114 &3556808815294754078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3085048315828527350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9927b6ca74593a94c966e0d76adfefb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  placementArea: {x: -10, y: 10}
+  UserSelectionUI: {fileID: 1507237069924515126}
+  Instructor: {fileID: 1217214653494805702}
+  Trainee: {fileID: 930628048334600360}
 --- !u!1 &7419482160643114662
 GameObject:
   m_ObjectHideFlags: 0
