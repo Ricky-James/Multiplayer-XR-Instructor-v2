@@ -3,38 +3,55 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-public class Movement : MonoBehaviour
+public class Movement : NetworkBehaviour
 {
 
-    private Vector3 position { get; set; }
+    private NetworkVariable<Vector3> position { get; set; }
 
-    void Update()
+    private void Start()
     {
-        
-        if (Input.GetKey(KeyCode.W))
-        {
-            UpdatePosition(Vector3.forward);
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            UpdatePosition(Vector3.left);
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            UpdatePosition(Vector3.back);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            UpdatePosition(Vector3.right);
-        }
-
-        transform.position = position;
+        position.Value = transform.position;
 
     }
 
-    void UpdatePosition(Vector3 direction)
+    void Update()
     {
-        position += direction * (Time.deltaTime * 5);
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            ResetPositionServerRpc();
+        }
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            UpdatePositionServerRpc(Vector3.forward);
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            UpdatePositionServerRpc(Vector3.left);
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            UpdatePositionServerRpc(Vector3.back);
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            UpdatePositionServerRpc(Vector3.right);
+        }
+
+        transform.position = position.Value;
+
+    }
+
+    [ServerRpc]
+    void UpdatePositionServerRpc(Vector3 direction)
+    {
+        position.Value += direction * (Time.deltaTime * 5);
+    }
+
+    [ServerRpc]
+    void ResetPositionServerRpc()
+    {
+        position.Value = Vector3.zero;
     }
 
 

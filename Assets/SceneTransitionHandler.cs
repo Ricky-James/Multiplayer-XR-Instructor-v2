@@ -9,7 +9,7 @@ public class SceneTransitionHandler : MonoBehaviour
     static public SceneTransitionHandler sceneTransitionHandler { get; internal set; }
 
     [SerializeField]
-    public string DefaultMainMenu = "StartUp";
+    public string DefaultMainMenu = "SampleScene";
 
     [HideInInspector]
     public delegate void ClientLoadedSceneDelegateHandler(ulong clientId);
