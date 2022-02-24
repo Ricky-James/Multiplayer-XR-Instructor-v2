@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +14,9 @@ public class NetworkPlayer : NetworkBehaviour
     private GameObject Trainee;
 
     private bool UserTypeSelected = false;
+
+    public NetworkVariable<bool> isTrainee = new NetworkVariable<bool>(false);
+    private NetworkVariable<bool> isInstructor = new NetworkVariable<bool>(false);
 
     public override void OnNetworkSpawn()
     {
@@ -42,6 +46,8 @@ public class NetworkPlayer : NetworkBehaviour
     //        DisableClientInput();
     //    }
     //}
+
+    
 
     public void DisableOtherClientInput()
     {
@@ -89,17 +95,41 @@ public class NetworkPlayer : NetworkBehaviour
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 UserTypeSelected = true;
+                FindObjectOfType<GameManager>().UpdateTraineeMeshStateClientRpc();
                 DisableTraineeScripts(true);
+                
             }
             if(Input.GetKeyDown(KeyCode.E))
             {
+                SetTraineeServerRpc();
                 UserTypeSelected = true;
-                Trainee.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+                FindObjectOfType<GameManager>().UpdateTraineeMeshStateClientRpc();
                 DisableInstructorScripts(true);
                 
             }
         }
+    }
 
+
+
+    [ServerRpc]
+    private void SetTraineeServerRpc()
+    {
+        isTrainee.Value = true;
+        Trainee.GetComponent<MeshRenderer>().enabled = true;
+    }
+
+
+    // Function runs on player connection to enable the meshes of trainees
+    public void EnableMesh()
+    {
+        //foreach (var x in GameObject.FindGameObjectsWithTag("User"))
+        //{
+        //    if (x.GetComponent<NetworkPlayer>().isTrainee.Value)
+        //    {
+        //        x.GetComponentInChildren<MeshRenderer>().enabled = true;
+        //    }
+        //}
     }
 
     private void Start()

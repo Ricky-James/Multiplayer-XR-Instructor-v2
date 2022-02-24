@@ -8,50 +8,37 @@ public class Movement : NetworkBehaviour
 
     private NetworkVariable<Vector3> position { get; set; }
 
-    private void Start()
-    {
-        position.Value = transform.position;
-
-    }
-
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if(IsOwner)
         {
-            ResetPositionServerRpc();
-        }
+            if (Input.GetKey(KeyCode.W))
+            {
+                UpdatePositionServerRpc(Vector3.forward, Time.deltaTime);
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                UpdatePositionServerRpc(Vector3.left, Time.deltaTime);
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                UpdatePositionServerRpc(Vector3.back, Time.deltaTime);
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                UpdatePositionServerRpc(Vector3.right, Time.deltaTime);
+            }
 
-        if (Input.GetKey(KeyCode.W))
-        {
-            UpdatePositionServerRpc(Vector3.forward);
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            UpdatePositionServerRpc(Vector3.left);
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            UpdatePositionServerRpc(Vector3.back);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            UpdatePositionServerRpc(Vector3.right);
-        }
+            transform.position = position.Value;
 
-        transform.position = position.Value;
+        }
 
     }
 
     [ServerRpc]
-    void UpdatePositionServerRpc(Vector3 direction)
+    void UpdatePositionServerRpc(Vector3 direction, float time)
     {
-        position.Value += direction * (Time.deltaTime * 5);
-    }
-
-    [ServerRpc]
-    void ResetPositionServerRpc()
-    {
-        position.Value = Vector3.zero;
+        position.Value += direction * (time * 5);
     }
 
 
