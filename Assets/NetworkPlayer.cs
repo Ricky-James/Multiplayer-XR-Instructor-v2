@@ -15,12 +15,37 @@ public class NetworkPlayer : NetworkBehaviour
 
     private bool UserTypeSelected = false;
 
-    public NetworkVariable<bool> isTrainee = new NetworkVariable<bool>(false);
-    private NetworkVariable<bool> isInstructor = new NetworkVariable<bool>(false);
+    public NetworkVariable<bool> IsInstructor = new NetworkVariable<bool>(false);
 
     public override void OnNetworkSpawn()
     {
+        // Find associated user settings
+        //foreach(UserSettings settings in FindObjectsOfType<UserSettings>())
+        //{
+        //    NetworkObject o = settings.GetComponent<NetworkObject>();
+        //    if(o.OwnerClientId == )
+        //}
+
+
+        IsInstructor = FindObjectOfType<UserSettings>().IsInstructor;
         DisableOtherClientInput();
+
+        if (IsOwner && IsClient && !UserTypeSelected)
+        {
+            if (IsInstructor.Value)
+            {
+                UserTypeSelected = true;
+                DisableTraineeScripts(true);
+
+            }
+            else
+            {
+               // SetTraineeServerRpc();
+                UserTypeSelected = true;
+                DisableInstructorScripts(true);
+
+            }
+        }
     }
 
     ////UI Button
@@ -90,34 +115,17 @@ public class NetworkPlayer : NetworkBehaviour
 
     private void Update()
     {
-        if(IsOwner && IsClient && !UserTypeSelected)
-        {
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                UserTypeSelected = true;
-                FindObjectOfType<GameManager>().UpdateTraineeMeshStateClientRpc();
-                DisableTraineeScripts(true);
-                
-            }
-            if(Input.GetKeyDown(KeyCode.E))
-            {
-                SetTraineeServerRpc();
-                UserTypeSelected = true;
-                FindObjectOfType<GameManager>().UpdateTraineeMeshStateClientRpc();
-                DisableInstructorScripts(true);
-                
-            }
-        }
+
     }
 
 
 
-    [ServerRpc]
-    private void SetTraineeServerRpc()
-    {
-        isTrainee.Value = true;
-        Trainee.GetComponent<MeshRenderer>().enabled = true;
-    }
+    //[ServerRpc]
+    //private void SetTraineeServerRpc()
+    //{
+    //    isTrainee.Value = true;
+    //    Trainee.GetComponent<MeshRenderer>().enabled = true;
+    //}
 
 
     // Function runs on player connection to enable the meshes of trainees
