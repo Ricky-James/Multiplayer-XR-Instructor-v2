@@ -32,34 +32,23 @@ public class GameManager : NetworkManager
 
     private void ClientConnected(ulong clientId)
     {
-        if(IsServer || IsHost)
-        {
-            GameObject client = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject;
-            UpdateTraineeMeshStateClientRpc(client);
-        }
-       
+        UpdateTraineeMeshStateClientRpc();
     }
 
     [ClientRpc]
-    public void UpdateTraineeMeshStateClientRpc(GameObject client)
+    public void UpdateTraineeMeshStateClientRpc()
     {
-        NetworkPlayer player = client.GetComponent<NetworkPlayer>();
-
-
-        player.GetComponentInChildren<MeshRenderer>().enabled = player.IsInstructor.Value ? false : true;
-        
-
-        //foreach (GameObject User in GameObject.FindGameObjectsWithTag("User"))
-        //{
-        //    if (User.GetComponent<NetworkPlayer>().isTrainee.Value)
-        //    {
-        //        User.GetComponentInChildren<MeshRenderer>().enabled = true;
-        //    }
-        //}
+        foreach (GameObject User in GameObject.FindGameObjectsWithTag("User"))
+        {
+            if (User.GetComponent<NetworkPlayer>().isTrainee.Value)
+            {
+                User.GetComponentInChildren<MeshRenderer>().enabled = true;
+            }
+        }
     }
 
-    //private void Update()
-    //{
-    //    UpdateTraineeMeshStateClientRpc();
-    //}
+    private void Update()
+    {
+        UpdateTraineeMeshStateClientRpc();
+    }
 }
