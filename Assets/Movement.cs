@@ -6,7 +6,7 @@ using Unity.Netcode;
 public class Movement : NetworkBehaviour
 {
 
-    private NetworkVariable<Vector3> position { get; set; }
+    private NetworkVariable<Vector3> position = new NetworkVariable<Vector3>();
 
     void Update()
     {

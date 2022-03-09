@@ -24,8 +24,6 @@
           </e>
         </e>
         <e p="SceneTransitionHandler.cs" t="Include" />
-        <e p="SetTrainee.cs" t="Include" />
-        <e p="UserConfig.cs" t="Include" />
       </e>
       <e p="ClientNetworkTransform.csproj" t="IncludeRecursive" />
       <e p="ClientNetworkTransform.Player.csproj" t="IncludeRecursive" />
@@ -1001,7 +999,7 @@
               <e p="Unity.Mathematics.Editor.asmdef" t="Include" />
             </e>
           </e>
-          <e p="com.unity.netcode.adapter.utp@1.0.0-pre.5" t="Include">
+          <e p="com.unity.netcode.adapter.utp@1.0.0-pre.6" t="Include">
             <e p="Editor" t="Include">
               <e p="com.unity.netcode.adapter.utp.editor.asmdef" t="Include" />
               <e p="MultiplayerWindow.cs" t="Include" />
@@ -1011,10 +1009,14 @@
               <e p="BatchedReceiveQueue.cs" t="Include" />
               <e p="BatchedSendQueue.cs" t="Include" />
               <e p="com.unity.netcode.adapter.utp.asmdef" t="Include" />
+              <e p="Metrics" t="Include">
+                <e p="NetworkMetricsContext.cs" t="Include" />
+              </e>
+              <e p="NetworkMetricsPipelineStage.cs" t="Include" />
               <e p="UnityTransport.cs" t="Include" />
             </e>
           </e>
-          <e p="com.unity.netcode.gameobjects@1.0.0-pre.5" t="Include">
+          <e p="com.unity.netcode.gameobjects@1.0.0-pre.6" t="Include">
             <e p="Components" t="Include">
               <e p="AssemblyInfo.cs" t="Include" />
               <e p="com.unity.netcode.components.asmdef" t="Include" />
@@ -1040,7 +1042,6 @@
                 <e p="RuntimeAccessModifiersILPP.cs" t="Include" />
               </e>
               <e p="com.unity.netcode.editor.asmdef" t="Include" />
-              <e p="DontShowInTransportDropdownAttribute.cs" t="Include" />
               <e p="NetworkAnimatorEditor.cs" t="Include" />
               <e p="NetworkBehaviourEditor.cs" t="Include" />
               <e p="NetworkManagerEditor.cs" t="Include" />
@@ -1106,7 +1107,7 @@
                   <e p="NamedMessage.cs" t="Include" />
                   <e p="NetworkVariableDeltaMessage.cs" t="Include" />
                   <e p="ParentSyncMessage.cs" t="Include" />
-                  <e p="RpcMessage.cs" t="Include" />
+                  <e p="RpcMessages.cs" t="Include" />
                   <e p="SceneEventMessage.cs" t="Include" />
                   <e p="ServerLogMessage.cs" t="Include" />
                   <e p="SnapshotDataMessage.cs" t="Include" />
@@ -1138,6 +1139,7 @@
                 <e p="ProfilingHooks.cs" t="Include" />
               </e>
               <e p="SceneManagement" t="Include">
+                <e p="ISceneManagerHandler.cs" t="Include" />
                 <e p="NetworkSceneManager.cs" t="Include" />
                 <e p="SceneEventData.cs" t="Include" />
                 <e p="SceneEventProgress.cs" t="Include" />
@@ -2242,7 +2244,7 @@
               <e p="Unity.Toolchain.Win-x86_64-Linux-x86_64.asmdef" t="Include" />
             </e>
           </e>
-          <e p="com.unity.transport@1.0.0-pre.12" t="Include">
+          <e p="com.unity.transport@1.0.0-pre.14" t="Include">
             <e p="Editor" t="Include">
               <e p="RoslynAnalyzerFix.cs" t="Include" />
               <e p="Unity.Networking.Editor.asmdef" t="Include" />
@@ -2284,6 +2286,7 @@
                   <e p="RelayMessageBind.cs" t="Include" />
                   <e p="RelayMessageConnectRequest.cs" t="Include" />
                   <e p="RelayMessageDisconnect.cs" t="Include" />
+                  <e p="RelayMessageError.cs" t="Include" />
                   <e p="RelayMessageHeader.cs" t="Include" />
                   <e p="RelayMessagePing.cs" t="Include" />
                   <e p="RelayMessageRelay.cs" t="Include" />

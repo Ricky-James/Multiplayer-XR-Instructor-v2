@@ -10,15 +10,13 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/SetTrainee.cs" root0="FORCE_HIGHLIGHTING" />
-  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Assets/SetTrainee.cs" />
-        <option value="$PROJECT_DIR$/Assets/GameManager.cs" />
         <option value="$PROJECT_DIR$/Assets/NetworkPlayer.cs" />
+        <option value="$PROJECT_DIR$/Assets/GameManager.cs" />
+        <option value="$PROJECT_DIR$/Assets/Movement.cs" />
       </list>
     </option>
   </component>
@@ -71,7 +69,8 @@
       <updated>1646689105351</updated>
       <workItem from="1646689115100" duration="1189000" />
       <workItem from="1646698817900" duration="3782000" />
-      <workItem from="1646793733702" duration="13693000" />
+      <workItem from="1646793733702" duration="14079000" />
+      <workItem from="1646849533391" duration="908000" />
     </task>
     <servers />
   </component>

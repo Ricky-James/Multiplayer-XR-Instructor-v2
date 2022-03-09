@@ -19,26 +19,10 @@ public class NetworkPlayer : NetworkBehaviour
     
     public NetworkVariable<bool> IsTrainee = new NetworkVariable<bool>(false);
 
-    //public NetworkVariable<bool> IsTrainee = new NetworkVariable<bool>(false);
-    //private NetworkVariable<bool> isInstructor = new NetworkVariable<bool>(false);
-
-    //public bool IsTrainee { get; private set; }
 
     
-    
-    private GameManager gm;
-
     public override void OnNetworkSpawn()
     {
-        gm = FindObjectOfType<GameManager>();
-        if (IsOwner)
-        {
-          //  gm.AddNewUser(OwnerClientId);
-        }
-
-        //GameManager.OnPlayerJoin += DisableOtherClientInput;
-        
-        
         DisableOtherClientInput();
         
     }
@@ -48,30 +32,7 @@ public class NetworkPlayer : NetworkBehaviour
     {
         IsTrainee.Value = _isTrainee;
     }
-    
-    ////UI Button
-    //public void SetUserTypeTrainee()
-    //{
-    //    Debug.Log("Trainee set 1");
-    //    //if(IsOwner && IsClient)
-    //    {
-    //        Debug.Log("Trainee set 2");
-    //        userType = UserType.Trainee;
-    //        //UserSelectionUI.enabled = false;
-    //        DisableClientInput();
-    //    }
-    //}
 
-    //// UI Button
-    //public void SetUserTypeInstructor()
-    //{
-    //    //if (IsOwner && IsClient)
-    //    {
-    //        userType = UserType.Instructor;
-    //        //UserSelectionUI.enabled = false;
-    //        DisableClientInput();
-    //    }
-    //}
 
     
 
@@ -106,7 +67,7 @@ public class NetworkPlayer : NetworkBehaviour
             var audioListener = Trainee.GetComponentInChildren<AudioListener>();
             var movement = Trainee.GetComponent<Movement>();
 
-            //movement.enabled = false;
+            movement.enabled = false;
             clientCamera.enabled = false;
             audioListener.enabled = false;
 
@@ -184,40 +145,4 @@ public class NetworkPlayer : NetworkBehaviour
 
     }
 
-
-
-    // Function runs on player connection to enable the meshes of trainees
-    public void EnableMesh()
-    {
-        //foreach (var x in GameObject.FindGameObjectsWithTag("User"))
-        //{
-        //    if (x.GetComponent<NetworkPlayer>().isTrainee.Value)
-        //    {
-        //        x.GetComponentInChildren<MeshRenderer>().enabled = true;
-        //    }
-        //}
-    }
-
-    private void Start()
-    {
-
-        if (IsClient && IsOwner)
-        {
-            Debug.Log("Test");
-            //UserSelectionUI = transform.Find("UserTypeSelectionCanvas").gameObject;
-            //Instructor = transform.Find("Instructor").gameObject;
-            //Trainee = transform.Find("Trainee").gameObject;
-
-            //if(Input.GetKeyDown(KeyCode.Q))
-            //{
-                //Instructor.SetActive(true);
-                //UserSelectionUI.SetActive(false);
-            //}
-            //if(Input.GetKeyDown(KeyCode.E))
-            //{
-            //    Trainee.SetActive(true);
-            //    UserSelectionUI.SetActive(false);
-            //}
-        }
-    }
 }
