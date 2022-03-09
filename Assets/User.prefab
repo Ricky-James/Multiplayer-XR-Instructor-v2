@@ -872,7 +872,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Instructor: {fileID: 1217214653494805702}
   Trainee: {fileID: 930628048334600360}
-  isTrainee:
+  IsTrainee:
     m_InternalValue: 0
 --- !u!1 &7419482160643114662
 GameObject:

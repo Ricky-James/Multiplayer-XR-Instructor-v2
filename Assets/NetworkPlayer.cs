@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class NetworkPlayer : NetworkBehaviour
 {
@@ -14,15 +16,39 @@ public class NetworkPlayer : NetworkBehaviour
     private GameObject Trainee;
 
     private bool UserTypeSelected = false;
+    
+    public NetworkVariable<bool> IsTrainee = new NetworkVariable<bool>(false);
 
-    public NetworkVariable<bool> isTrainee = new NetworkVariable<bool>(false);
-    private NetworkVariable<bool> isInstructor = new NetworkVariable<bool>(false);
+    //public NetworkVariable<bool> IsTrainee = new NetworkVariable<bool>(false);
+    //private NetworkVariable<bool> isInstructor = new NetworkVariable<bool>(false);
+
+    //public bool IsTrainee { get; private set; }
+
+    
+    
+    private GameManager gm;
 
     public override void OnNetworkSpawn()
     {
-        DisableOtherClientInput();
-    }
+        gm = FindObjectOfType<GameManager>();
+        if (IsOwner)
+        {
+          //  gm.AddNewUser(OwnerClientId);
+        }
 
+        //GameManager.OnPlayerJoin += DisableOtherClientInput;
+        
+        
+        DisableOtherClientInput();
+        
+    }
+    
+    [ServerRpc]
+    void SetTraineeServerRpc(bool _isTrainee)
+    {
+        IsTrainee.Value = _isTrainee;
+    }
+    
     ////UI Button
     //public void SetUserTypeTrainee()
     //{
@@ -80,7 +106,7 @@ public class NetworkPlayer : NetworkBehaviour
             var audioListener = Trainee.GetComponentInChildren<AudioListener>();
             var movement = Trainee.GetComponent<Movement>();
 
-            movement.enabled = false;
+            //movement.enabled = false;
             clientCamera.enabled = false;
             audioListener.enabled = false;
 
@@ -90,34 +116,74 @@ public class NetworkPlayer : NetworkBehaviour
 
     private void Update()
     {
-        if(IsOwner && IsClient && !UserTypeSelected)
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                UserTypeSelected = true;
-                FindObjectOfType<GameManager>().UpdateTraineeMeshStateClientRpc();
-                DisableTraineeScripts(true);
-                
-            }
-            if(Input.GetKeyDown(KeyCode.E))
-            {
-                SetTraineeServerRpc();
-                UserTypeSelected = true;
-                FindObjectOfType<GameManager>().UpdateTraineeMeshStateClientRpc();
-                DisableInstructorScripts(true);
-                
-            }
+            StartCoroutine(nameof(ConfigureInstructor));
+
         }
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            StartCoroutine(nameof(ConfigureTrainee));
+        }
+
     }
 
-
-
-    [ServerRpc]
-    private void SetTraineeServerRpc()
+    IEnumerator ConfigureInstructor()
     {
-        isTrainee.Value = true;
-        Trainee.GetComponent<MeshRenderer>().enabled = true;
+        if (IsOwner && IsClient && !UserTypeSelected)
+        {
+            SetTraineeServerRpc(false);
+            SpawnAsInstructor();
+        }
+
+        yield return new WaitForSeconds((float)NetworkManager.Singleton.NetworkTimeSystem.HardResetThresholdSec);
+        UpdateMeshServerRpc();
+        yield return null;
     }
+
+    IEnumerator ConfigureTrainee()
+    {
+        if (IsOwner && IsClient && !UserTypeSelected)
+        {
+            SetTraineeServerRpc(true);
+            SpawnAsTrainee();
+        }
+        yield return new WaitForSeconds(2f);
+        UpdateMeshServerRpc();
+        yield return null;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    void UpdateMeshServerRpc()
+    {
+        MeshRenderer r = GetComponentInChildren<MeshRenderer>();
+        r.enabled = r.GetComponentInParent<NetworkPlayer>().IsTrainee.Value;
+        UpdateMeshClientRpc();
+    }
+
+    [ClientRpc(Delivery = RpcDelivery.Reliable)]
+    void UpdateMeshClientRpc()
+    {
+        MeshRenderer r = GetComponentInChildren<MeshRenderer>();
+        r.enabled = r.GetComponentInParent<NetworkPlayer>().IsTrainee.Value;
+    }
+
+    void SpawnAsInstructor()
+    {
+
+        UserTypeSelected = true;
+        DisableTraineeScripts(true);
+
+    }
+    
+    void SpawnAsTrainee()
+    {
+
+        UserTypeSelected = true;
+        DisableInstructorScripts(true);
+
+    }
+
 
 
     // Function runs on player connection to enable the meshes of trainees
