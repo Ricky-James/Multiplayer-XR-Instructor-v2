@@ -8,8 +8,8 @@ using Random = UnityEngine.Random;
 public class NetworkPlayer : NetworkBehaviour
 {
 
-    //[SerializeField]
-    //private Image UserSelectionUI;
+    [SerializeField]
+    private GameObject UserSelectionUI;
     [SerializeField]
     private GameObject Instructor;
     [SerializeField]
@@ -75,30 +75,19 @@ public class NetworkPlayer : NetworkBehaviour
 
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            StartCoroutine(nameof(ConfigureInstructor));
 
-        }
-        if(Input.GetKeyDown(KeyCode.E))
-        {
-            StartCoroutine(nameof(ConfigureTrainee));
-        }
-
-    }
 
     IEnumerator ConfigureInstructor()
     {
         if (IsOwner && IsClient && !UserTypeSelected)
         {
             SetTraineeServerRpc(false);
-            SpawnAsInstructor();
+            UserTypeSelected = true;
+            DisableTraineeScripts(true);
         }
 
         yield return new WaitForSeconds((float)NetworkManager.Singleton.NetworkTimeSystem.HardResetThresholdSec);
-        UpdateMeshServerRpc();
+        //UpdateMeshServerRpc();
         yield return null;
     }
 
@@ -106,43 +95,49 @@ public class NetworkPlayer : NetworkBehaviour
     {
         if (IsOwner && IsClient && !UserTypeSelected)
         {
+            UserTypeSelected = true;
             SetTraineeServerRpc(true);
-            SpawnAsTrainee();
+            DisableInstructorScripts(true);
         }
         yield return new WaitForSeconds(2f);
-        UpdateMeshServerRpc();
+        //UpdateMeshServerRpc();
         yield return null;
     }
 
     [ServerRpc(RequireOwnership = false)]
-    void UpdateMeshServerRpc()
+    public void UpdateMeshServerRpc()
     {
-        MeshRenderer r = GetComponentInChildren<MeshRenderer>();
-        r.enabled = r.GetComponentInParent<NetworkPlayer>().IsTrainee.Value;
         UpdateMeshClientRpc();
     }
 
-    [ClientRpc(Delivery = RpcDelivery.Reliable)]
+    [ClientRpc]
     void UpdateMeshClientRpc()
     {
         MeshRenderer r = GetComponentInChildren<MeshRenderer>();
         r.enabled = r.GetComponentInParent<NetworkPlayer>().IsTrainee.Value;
     }
 
-    void SpawnAsInstructor()
+    void Start()
     {
-
-        UserTypeSelected = true;
-        DisableTraineeScripts(true);
-
+        if (IsOwner && IsClient)
+        {
+            UserSelectionUI.SetActive(true);
+        }
     }
-    
-    void SpawnAsTrainee()
+
+    public void SetUserTypeButton(bool isTrainee)
     {
-
-        UserTypeSelected = true;
-        DisableInstructorScripts(true);
-
+        UserSelectionUI.SetActive(false);
+        StartCoroutine(isTrainee ? nameof(ConfigureTrainee) : nameof(ConfigureInstructor));
+        foreach (NetworkPlayer player in FindObjectsOfType<NetworkPlayer>())
+        {
+            if (player.IsTrainee.Value)
+            {
+                player.UpdateMeshServerRpc();
+            }
+        }
+        
     }
+
 
 }

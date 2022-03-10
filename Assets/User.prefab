@@ -123,15 +123,15 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3556808815294754078}
         m_TargetAssemblyTypeName: NetworkPlayer, Assembly-CSharp
-        m_MethodName: SetUserTypeTrainee
-        m_Mode: 1
+        m_MethodName: SetUserTypeButton
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!1 &389111270319940417
 GameObject:
@@ -797,8 +797,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3556808815294754078}
         m_TargetAssemblyTypeName: NetworkPlayer, Assembly-CSharp
-        m_MethodName: SetUserTypeInstructor
-        m_Mode: 1
+        m_MethodName: SetUserTypeButton
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -870,6 +870,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9927b6ca74593a94c966e0d76adfefb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UserSelectionUI: {fileID: 1507237069924515126}
   Instructor: {fileID: 1217214653494805702}
   Trainee: {fileID: 930628048334600360}
   IsTrainee:

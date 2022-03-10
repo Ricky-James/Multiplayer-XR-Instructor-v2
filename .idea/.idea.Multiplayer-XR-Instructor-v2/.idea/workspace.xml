@@ -14,9 +14,9 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Assets/SetTrainee.cs" />
-        <option value="$PROJECT_DIR$/Assets/NetworkPlayer.cs" />
         <option value="$PROJECT_DIR$/Assets/GameManager.cs" />
         <option value="$PROJECT_DIR$/Assets/Movement.cs" />
+        <option value="$PROJECT_DIR$/Assets/NetworkPlayer.cs" />
       </list>
     </option>
   </component>
