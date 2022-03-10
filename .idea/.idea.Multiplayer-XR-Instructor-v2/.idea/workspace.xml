@@ -10,13 +10,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/IPConfiguration.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Assets/SetTrainee.cs" />
         <option value="$PROJECT_DIR$/Assets/GameManager.cs" />
         <option value="$PROJECT_DIR$/Assets/Movement.cs" />
+        <option value="$PROJECT_DIR$/Assets/InstructorControls.cs" />
         <option value="$PROJECT_DIR$/Assets/NetworkPlayer.cs" />
+        <option value="$PROJECT_DIR$/Assets/IPConfiguration.cs" />
       </list>
     </option>
   </component>
@@ -71,6 +76,7 @@
       <workItem from="1646698817900" duration="3782000" />
       <workItem from="1646793733702" duration="14079000" />
       <workItem from="1646849533391" duration="908000" />
+      <workItem from="1646939309979" duration="8650000" />
     </task>
     <servers />
   </component>
@@ -83,9 +89,9 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup" timestamp="1646701356708">
+    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup" timestamp="1646945653380">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup/2560.0.1920.1040/-1080.-232.1080.1880/0.0.2560.1400@0.0.2560.1400" timestamp="1646701356708" />
+    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup/2560.0.1920.1040/-1080.-232.1080.1880/0.0.2560.1400@0.0.2560.1400" timestamp="1646945653380" />
   </component>
 </project>

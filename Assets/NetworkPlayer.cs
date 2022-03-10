@@ -51,11 +51,9 @@ public class NetworkPlayer : NetworkBehaviour
     {
         if(IsClient && !IsOwner || thisUser)
         {
-            var clientCamera = Instructor.GetComponentInChildren<Camera>();
-            var audioListener = Instructor.GetComponentInChildren<AudioListener>();
-
-            clientCamera.enabled = false;
-            audioListener.enabled = false;
+            GetComponentInChildren<Camera>().enabled = false;
+            GetComponentInChildren<AudioListener>().enabled = false;
+            GetComponentInChildren<InstructorControls>().enabled = false;
         }
     }
 
@@ -63,35 +61,31 @@ public class NetworkPlayer : NetworkBehaviour
     {
         if (IsClient && !IsOwner || thisUser)
         {
-            var clientCamera = Trainee.GetComponentInChildren<Camera>();
-            var audioListener = Trainee.GetComponentInChildren<AudioListener>();
-            var movement = Trainee.GetComponent<Movement>();
-
-            movement.enabled = false;
-            clientCamera.enabled = false;
-            audioListener.enabled = false;
-
+            Trainee.GetComponentInChildren<Camera>().enabled = false;
+            Trainee.GetComponentInChildren<AudioListener>().enabled = false;
+            Trainee.GetComponent<Movement>().enabled = false;
         }
 
     }
 
 
-
-    IEnumerator ConfigureInstructor()
+    private IEnumerator ConfigureInstructor()
     {
         if (IsOwner && IsClient && !UserTypeSelected)
         {
             SetTraineeServerRpc(false);
             UserTypeSelected = true;
             DisableTraineeScripts(true);
+            Instructor.GetComponentInChildren<InstructorControls>().enabled = true;
         }
 
-        yield return new WaitForSeconds((float)NetworkManager.Singleton.NetworkTimeSystem.HardResetThresholdSec);
-        //UpdateMeshServerRpc();
+        float delayedSync = (float)NetworkManager.Singleton.NetworkTimeSystem.HardResetThresholdSec;
+        yield return new WaitForSeconds(delayedSync);
+        UpdateMeshServerRpc();
         yield return null;
     }
 
-    IEnumerator ConfigureTrainee()
+    private IEnumerator ConfigureTrainee()
     {
         if (IsOwner && IsClient && !UserTypeSelected)
         {
@@ -100,7 +94,7 @@ public class NetworkPlayer : NetworkBehaviour
             DisableInstructorScripts(true);
         }
         yield return new WaitForSeconds(2f);
-        //UpdateMeshServerRpc();
+        UpdateMeshServerRpc();
         yield return null;
     }
 
