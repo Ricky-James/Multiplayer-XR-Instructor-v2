@@ -8,6 +8,7 @@ public class NetworkStartup : MonoBehaviour
 {
     private void Start()
     {
+        
         if(SceneTransitionHandler.sceneTransitionHandler.InitializeAsHost)
         {
             NetworkManager.Singleton.StartHost();

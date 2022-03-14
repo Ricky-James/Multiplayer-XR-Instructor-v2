@@ -3,7 +3,6 @@ using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 public class NetworkPlayer : NetworkBehaviour
 {
@@ -18,6 +17,7 @@ public class NetworkPlayer : NetworkBehaviour
     private bool UserTypeSelected = false;
     
     public NetworkVariable<bool> IsTrainee = new NetworkVariable<bool>(false);
+    private bool TraineeCamAddedRegistered = false;
 
 
     
@@ -36,7 +36,7 @@ public class NetworkPlayer : NetworkBehaviour
 
     
 
-    public void DisableOtherClientInput()
+    private void DisableOtherClientInput()
     {
         
         // Disable scripts of other users
@@ -76,12 +76,13 @@ public class NetworkPlayer : NetworkBehaviour
             SetTraineeServerRpc(false);
             UserTypeSelected = true;
             DisableTraineeScripts(true);
-            Instructor.GetComponentInChildren<InstructorControls>().enabled = true;
+            InstructorControls instructorControls = Instructor.GetComponent<InstructorControls>();
+            instructorControls.enabled = true;
         }
-
+        // Need to wait for network variable to be updated across clients
         float delayedSync = (float)NetworkManager.Singleton.NetworkTimeSystem.HardResetThresholdSec;
         yield return new WaitForSeconds(delayedSync);
-        UpdateMeshServerRpc();
+        UpdateOtherClientsServerRpc();
         yield return null;
     }
 
@@ -92,23 +93,45 @@ public class NetworkPlayer : NetworkBehaviour
             UserTypeSelected = true;
             SetTraineeServerRpc(true);
             DisableInstructorScripts(true);
+            
+            
+
         }
-        yield return new WaitForSeconds(2f);
-        UpdateMeshServerRpc();
+        float delayedSync = (float)NetworkManager.Singleton.NetworkTimeSystem.HardResetThresholdSec;
+        yield return new WaitForSeconds(delayedSync);
+        UpdateOtherClientsServerRpc();
+
+
+
         yield return null;
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void UpdateMeshServerRpc()
+    private void UpdateOtherClientsServerRpc()
     {
-        UpdateMeshClientRpc();
+        UpdateOtherClientsClientRpc();
     }
 
     [ClientRpc]
-    void UpdateMeshClientRpc()
+    private void UpdateOtherClientsClientRpc()
     {
+        // Toggle trainee meshes on
         MeshRenderer r = GetComponentInChildren<MeshRenderer>();
         r.enabled = r.GetComponentInParent<NetworkPlayer>().IsTrainee.Value;
+
+        // If this user is a trainee, add their camera to the list of camera options for the instructor
+        if (IsTrainee.Value && TraineeCamAddedRegistered == false)
+        {
+            TraineeCamAddedRegistered = true;
+            Camera traineeCam = Trainee.GetComponentInChildren<Camera>();
+            foreach (InstructorControls ic in FindObjectsOfType<InstructorControls>())
+            {
+                ic.AddNewCamera(traineeCam);
+            }
+        }
+
+        
+
     }
 
     void Start()
@@ -127,7 +150,7 @@ public class NetworkPlayer : NetworkBehaviour
         {
             if (player.IsTrainee.Value)
             {
-                player.UpdateMeshServerRpc();
+                player.UpdateOtherClientsServerRpc();
             }
         }
         

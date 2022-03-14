@@ -1742,7 +1742,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74e54158adac8f94fb51fb8150302c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HostButtonText: {fileID: 250015470}
+  hostButtonText: {fileID: 250015470}
 --- !u!1 &1686046786
 GameObject:
   m_ObjectHideFlags: 0

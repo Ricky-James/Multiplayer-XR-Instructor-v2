@@ -19,9 +19,11 @@
         <option value="$PROJECT_DIR$/Assets/SetTrainee.cs" />
         <option value="$PROJECT_DIR$/Assets/GameManager.cs" />
         <option value="$PROJECT_DIR$/Assets/Movement.cs" />
-        <option value="$PROJECT_DIR$/Assets/InstructorControls.cs" />
-        <option value="$PROJECT_DIR$/Assets/NetworkPlayer.cs" />
         <option value="$PROJECT_DIR$/Assets/IPConfiguration.cs" />
+        <option value="$PROJECT_DIR$/Assets/NetworkStartup.cs" />
+        <option value="$PROJECT_DIR$/Assets/SceneTransitionHandler.cs" />
+        <option value="$PROJECT_DIR$/Assets/NetworkPlayer.cs" />
+        <option value="$PROJECT_DIR$/Assets/InstructorControls.cs" />
       </list>
     </option>
   </component>
@@ -76,7 +78,8 @@
       <workItem from="1646698817900" duration="3782000" />
       <workItem from="1646793733702" duration="14079000" />
       <workItem from="1646849533391" duration="908000" />
-      <workItem from="1646939309979" duration="8650000" />
+      <workItem from="1646939309979" duration="9003000" />
+      <workItem from="1647266111353" duration="12753000" />
     </task>
     <servers />
   </component>
