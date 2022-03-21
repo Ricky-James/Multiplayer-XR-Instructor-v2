@@ -8,25 +8,30 @@ using UnityEngine.UI;
 
 public class InstructorControls : NetworkBehaviour
 {
-    [SerializeField] private List<Camera> cameraList;
-    [SerializeField] private Canvas instructorCanvas;
+    public List<Camera> cameraList = new List<Camera>();
+    [SerializeField] private Canvas singleCanvas;
+    [SerializeField] private Canvas multiCanvas;
     [SerializeField] private Dropdown cameraDropdown;
     private List<string> dropdownOptions = new List<string>();
     
     private int playerCameraCount = 0;
     private int currentCamera = 0;
-
+    private MultiCanvasControls multiControls;
+    
+    
     private void OnEnable()
     {
         if (IsOwner && IsClient)
         {
             cameraList[currentCamera].enabled = true;
             cameraList[currentCamera].GetComponent<AudioListener>().enabled = true;
-            instructorCanvas.enabled = true;
-            for(int i = 0; i <cameraList.Count; i++)
+            singleCanvas.enabled = true;
+            for(int i = 0; i < cameraList.Count; i++)
             {
                 dropdownOptions.Add($"CCTV Camera {i+1}");
             }
+
+            multiControls = GetComponent<MultiCanvasControls>();
         }
     }
 
@@ -84,7 +89,7 @@ public class InstructorControls : NetworkBehaviour
     // Used to add cameras of new players
     public void AddNewCamera(Camera cam)
     {
-        if (IsOwner && IsClient)
+        if (IsOwner && IsClient && enabled)
         {
             // Counter used to uniquely number the trainee cams in the list
             playerCameraCount++;
@@ -104,7 +109,41 @@ public class InstructorControls : NetworkBehaviour
             cameraDropdown.AddOptions(dropdownOptions);
             // Set active option to the active camera (resets to 0 after repopulating the list)
             cameraDropdown.value = currentCamera;
+            
+            // Also update the dropdowns for the multi canvas
+            multiControls.UpdateDropdowns(dropdownOptions);
         }
+    }
 
+    // Button to switch canvases
+    public void SwitchToMultiView()
+    {
+        if (IsOwner)
+        {
+            singleCanvas.enabled = false;
+            multiControls.enabled = true;
+            multiCanvas.enabled = true;
+        }
+    }
+
+    // Button to switch to single
+    public void SwitchToSingleView()
+    {
+        if (IsOwner)
+        {
+            multiCanvas.enabled = false;
+            singleCanvas.enabled = true;
+            multiControls.enabled = false;
+        
+            // Reset cameras
+            foreach (Camera c in cameraList)
+            {
+                c.enabled = false;
+                c.targetTexture = null;
+            }
+
+            cameraList[0].enabled = true;
+            cameraDropdown.value = 0;
+        }
     }
 }

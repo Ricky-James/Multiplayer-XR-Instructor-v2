@@ -47,6 +47,10 @@ public class NetworkPlayer : NetworkBehaviour
         }
     }
 
+    // thisUser flag disables these scripts for that user, not just other users
+    // i.e., to disable trainee scripts if the user selects instructor (and vice-versa)
+    // If thisUser is false, it disables the scripts of all other users
+    // This makes it so that one user doesn't control all users
     private void DisableInstructorScripts(bool thisUser = false)
     {
         if(IsClient && !IsOwner || thisUser)
@@ -54,6 +58,7 @@ public class NetworkPlayer : NetworkBehaviour
             GetComponentInChildren<Camera>().enabled = false;
             GetComponentInChildren<AudioListener>().enabled = false;
             GetComponentInChildren<InstructorControls>().enabled = false;
+            GetComponentInChildren<MultiCanvasControls>().enabled = false;
         }
     }
 
@@ -65,11 +70,10 @@ public class NetworkPlayer : NetworkBehaviour
             Trainee.GetComponentInChildren<AudioListener>().enabled = false;
             Trainee.GetComponent<Movement>().enabled = false;
         }
-
     }
 
 
-    private IEnumerator ConfigureInstructor()
+    private void ConfigureInstructor()
     {
         if (IsOwner && IsClient && !UserTypeSelected)
         {
@@ -79,39 +83,33 @@ public class NetworkPlayer : NetworkBehaviour
             InstructorControls instructorControls = Instructor.GetComponent<InstructorControls>();
             instructorControls.enabled = true;
         }
+        
         // Need to wait for network variable to be updated across clients
-        float delayedSync = (float)NetworkManager.Singleton.NetworkTimeSystem.HardResetThresholdSec;
-        yield return new WaitForSeconds(delayedSync);
-        UpdateOtherClientsServerRpc();
-        yield return null;
+        NetworkManager.Singleton.NetworkTickSystem.Tick += UpdateOtherClientsServerRpc;
     }
 
-    private IEnumerator ConfigureTrainee()
+    private void ConfigureTrainee()
     {
         if (IsOwner && IsClient && !UserTypeSelected)
         {
             UserTypeSelected = true;
             SetTraineeServerRpc(true);
             DisableInstructorScripts(true);
-            
-            
-
         }
-        float delayedSync = (float)NetworkManager.Singleton.NetworkTimeSystem.HardResetThresholdSec;
-        yield return new WaitForSeconds(delayedSync);
-        UpdateOtherClientsServerRpc();
-
-
-
-        yield return null;
+        
+        // Need to wait for network variable to be updated across clients
+        NetworkManager.Singleton.NetworkTickSystem.Tick += UpdateOtherClientsServerRpc;
     }
 
+    // Client tells server to run an update on all clients
     [ServerRpc(RequireOwnership = false)]
     private void UpdateOtherClientsServerRpc()
     {
         UpdateOtherClientsClientRpc();
     }
 
+    // Rpc to update all clients when a new user selects user type
+    // Makes trainees visible and adds that trainee's camera to the instructor menu
     [ClientRpc]
     private void UpdateOtherClientsClientRpc()
     {
@@ -130,25 +128,36 @@ public class NetworkPlayer : NetworkBehaviour
             }
         }
 
-        
-
+        // Remove client update after a tick
+        NetworkManager.Singleton.NetworkTickSystem.Tick -= UpdateOtherClientsServerRpc;
     }
 
     void Start()
     {
         if (IsOwner && IsClient)
         {
+            // Enable user type selection canvas
             UserSelectionUI.SetActive(true);
         }
     }
 
+    // UI buttons for selecting user type
     public void SetUserTypeButton(bool isTrainee)
     {
         UserSelectionUI.SetActive(false);
-        StartCoroutine(isTrainee ? nameof(ConfigureTrainee) : nameof(ConfigureInstructor));
+
+        if (isTrainee)
+        {
+            ConfigureTrainee();
+        }
+        else
+        {
+            ConfigureInstructor();
+        }
+        
         foreach (NetworkPlayer player in FindObjectsOfType<NetworkPlayer>())
         {
-            if (player.IsTrainee.Value)
+            //if (player.IsTrainee.Value)
             {
                 player.UpdateOtherClientsServerRpc();
             }
